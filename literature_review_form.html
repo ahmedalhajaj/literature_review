@@ -83,5 +83,27 @@
         
         <input type="submit" value="Submit">
     </form>
+        <script>
+        function saveDataToGitHub() {
+            const formData = new FormData(document.getElementById('evaluationForm'));
+            let data = {};
+            formData.forEach((value, key) => { data[key] = value; });
+            
+            fetch('https://api.github.com/repos/ahmedalhajaj/literature_review/contents/submissions/' + Date.now() + '.json', {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    message: 'New submission',
+                    content: btoa(JSON.stringify(data)),
+                    branch: 'main'
+                })
+            }).then(response => response.json())
+              .then(data => alert('Submission saved successfully!'))
+              .catch(error => alert('Error saving submission: ' + error));
+        }
+    </script>
 </body>
 </html>
+
