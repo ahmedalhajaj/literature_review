@@ -44,20 +44,6 @@
                 <td><input type="radio" name="problem_statement" value="A"></td>
                 <td><input type="number" name="score_problem_statement" min="70" max="100"></td>
             </tr>
-            <tr>
-                <td>Flow of the review</td>
-                <td><input type="radio" name="flow" value="C"></td>
-                <td><input type="radio" name="flow" value="B"></td>
-                <td><input type="radio" name="flow" value="A"></td>
-                <td><input type="number" name="score_flow" min="70" max="100"></td>
-            </tr>
-            <tr>
-                <td>Completeness of survey</td>
-                <td><input type="radio" name="completeness" value="C"></td>
-                <td><input type="radio" name="completeness" value="B"></td>
-                <td><input type="radio" name="completeness" value="A"></td>
-                <td><input type="number" name="score_completeness" min="70" max="100"></td>
-            </tr>
         </table>
         
         <br>
@@ -67,28 +53,33 @@
         <label for="notes">Notes:</label><br>
         <textarea id="notes" name="notes" rows="4"></textarea><br><br>
         
-        <button type="button" onclick="saveToRepository()">Submit</button>
+        <button type="button" onclick="saveToGitHub()">Submit</button>
     </form>
 
     <script>
-        function saveToRepository() {
+        function saveToGitHub() {
             const formData = new FormData(document.getElementById('evaluationForm'));
             let data = {};
             formData.forEach((value, key) => { data[key] = value; });
-            
-            fetch('https://api.github.com/repos/ahmedalhajaj/literature_review/contents/submissions/' + Date.now() + '.json', {
-                method: 'PUT',
+
+            const githubUsername = "ahmedalhajaj";
+            const repoName = "literature_review";
+            const fileName = `submissions/${Date.now()}.json`;
+
+            fetch(`https://api.github.com/repos/${ahmedalhajaj}/${literaturereview}/contents/${literature_review_form}`, {
+                method: "PUT",
                 headers: {
-                    'Content-Type': 'application/json'
+                    "Content-Type": "application/json"
                 },
                 body: JSON.stringify({
-                    message: 'New submission',
-                    content: btoa(JSON.stringify(data)),
-                    branch: 'main'
+                    message: "New Submission",
+                    content: btoa(JSON.stringify(data)), // Encode as Base64
+                    branch: "main"
                 })
-            }).then(response => response.json())
-              .then(data => alert('Submission saved successfully!'))
-              .catch(error => alert('Error saving submission: ' + error));
+            })
+            .then(response => response.json())
+            .then(data => alert("Submission saved successfully!"))
+            .catch(error => alert("Error saving submission: " + error));
         }
     </script>
 </body>
